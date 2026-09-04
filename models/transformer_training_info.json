@@ -1,0 +1,19 @@
+{
+  "architecture": "SignTransformer",
+  "representation": "body_relative",
+  "pooling": "learned_attention",
+  "sequence_length": 60,
+  "input_size": 258,
+  "num_classes": 61,
+  "d_model": 256,
+  "num_heads": 8,
+  "num_layers": 3,
+  "feedforward_dimension": 512,
+  "best_validation_accuracy": 100.0,
+  "best_epoch": 19,
+  "final_validation_accuracy": 100.0,
+  "test_accuracy": 100.0,
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+  "training_seconds": 127.23491382598877
+}
