@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://unpkg.com/compromise"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SignSync — UI Concept</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16211F;
+    --teal-900:#0A3234;
+    --teal-700:#0E4749;
+    --teal-600:#155A5A;
+    --teal-500:#1C6E6B;
+    --teal-100:#E4EEEC;
+    --paper:#EFF3F1;
+    --surface:#FFFFFF;
+    --amber:#E8A33D;
+    --amber-dark:#B87A1D;
+    --emergency:#C1443B;
+    --emergency-dark:#8F2E28;
+    --emergency-100:#F7E5E3;
+    --line:#DCE4E1;
+    --muted:#5B6B66;
+    --radius-s:10px;
+    --radius-m:16px;
+    --radius-l:26px;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background:transparent;
+    font-family:'Public Sans', sans-serif;
+    color:var(--ink);
+  }
+
+  .app{
+    max-width:460px;
+    margin:0 auto;
+    padding:20px 16px 40px;
+  }
+
+  /* ---------- Top brand strip ---------- */
+  .brandbar{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:6px 4px 18px;
+  }
+  .brandbar .mark{
+    width:30px; height:30px;
+    border-radius:9px;
+    background:var(--teal-700);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .brandbar .mark svg{ width:17px; height:17px; }
+  .brandbar .wordmark{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:19px;
+    letter-spacing:-0.01em;
+  }
+  .brandbar .sub{
+    margin-left:auto;
+    font-size:12px;
+    color:var(--muted);
+    font-weight:600;
+  }
+
+  /* ---------- Segmented nav to switch screens ---------- */
+  .tabs{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:6px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius-m);
+    padding:5px;
+    margin-bottom:22px;
+  }
+  .tab{
+    border:none;
+    background:transparent;
+    padding:9px 2px;
+    border-radius:12px;
+    font-family:'Public Sans', sans-serif;
+    font-size:11px;
+    font-weight:700;
+    color:var(--muted);
+    cursor:pointer;
+    line-height:1.25;
+    transition:background .18s ease, color .18s ease;
+  }
+  .tab.active{
+    background:var(--teal-700);
+    color:#fff;
+  }
+
+  [data-goto]{ cursor:pointer; }
+
+  .screen{ display:none; }
+  .screen.active{ display:block; animation:fade .25s ease; }
+  @keyframes fade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:none;} }
+
+  /* ---------- Phone frame ---------- */
+  .phone{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:34px;
+    padding:14px;
+    box-shadow:0 18px 40px -22px rgba(10,50,52,0.35);
+  }
+  .screenbody{
+    background:var(--surface);
+    border-radius:22px;
+    min-height:600px;
+    padding:26px 20px 24px;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+    overflow:hidden;
+  }
+  .statusdot{
+    position:absolute;
+    top:14px; right:20px;
+    width:6px; height:6px;
+    border-radius:50%;
+    background:var(--line);
+  }
+
+  /* ---------- Shared bits ---------- */
+  .eyebrow{
+    font-size:12px;
+    font-weight:700;
+    color:var(--teal-600);
+    margin:0 0 6px;
+  }
+  h1.headline{
+    font-family:'Fraunces', serif;
+    font-size:26px;
+    font-weight:600;
+    line-height:1.2;
+    margin:0 0 10px;
+    letter-spacing:-0.01em;
+  }
+  p.lede{
+    font-size:14px;
+    color:var(--muted);
+    line-height:1.55;
+    margin:0 0 26px;
+    max-width:30ch;
+  }
+  .field{
+    margin-bottom:14px;
+  }
+  .field label{
+    display:block;
+    font-size:12px;
+    font-weight:700;
+    color:var(--teal-700);
+    margin-bottom:6px;
+  }
+  .field input{
+    width:100%;
+    border:1.5px solid var(--line);
+    background:var(--paper);
+    border-radius:var(--radius-s);
+    padding:13px 14px;
+    font-family:'Public Sans', sans-serif;
+    font-size:14px;
+    color:var(--ink);
+  }
+  .field input:focus{
+    outline:2px solid var(--teal-500);
+    outline-offset:1px;
+    background:#fff;
+  }
+  .btn-primary{
+    width:100%;
+    background:var(--teal-700);
+    color:#fff;
+    border:none;
+    border-radius:var(--radius-s);
+    padding:15px;
+    font-family:'Public Sans', sans-serif;
+    font-weight:700;
+    font-size:15px;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    transition:background .15s ease;
+  }
+  .btn-primary:hover{ background:var(--teal-600); }
+  .btn-ghost{
+    width:100%;
+    background:transparent;
+    color:var(--teal-700);
+    border:1.5px solid var(--teal-700);
+    border-radius:var(--radius-s);
+    padding:13px;
+    font-weight:700;
+    font-size:14px;
+    cursor:pointer;
+  }
+  .spacer{ flex:1; }
+  .fineprint{
+    font-size:11.5px;
+    color:var(--muted);
+    text-align:center;
+    margin-top:14px;
+    line-height:1.5;
+  }
+
+  /* ===================== SCREEN 1 — Welcome ===================== */
+  .hero-badge{
+    width:64px; height:64px;
+    border-radius:20px;
+    background:linear-gradient(155deg, var(--teal-700), var(--teal-500));
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:20px;
+  }
+  .hero-badge svg{ width:34px; height:34px; }
+
+  /* ===================== SCREEN 2 — Home ===================== */
+  .homebar{
+    display:flex; align-items:center; margin-bottom:26px;
+  }
+  .homebar .mark{
+    width:34px; height:34px; border-radius:10px;
+    background:var(--teal-700);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .homebar .mark svg{ width:19px; height:19px; }
+  .homebar .word{
+    font-family:'Fraunces', serif; font-weight:600; font-size:18px; margin-left:9px;
+  }
+  .avatar{
+    margin-left:auto;
+    width:36px; height:36px; border-radius:50%;
+    background:var(--amber);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:13px; color:#5C3A0B;
+    border:2px solid var(--surface);
+    box-shadow:0 0 0 1.5px var(--line);
+  }
+  .greet-eyebrow{ font-size:12.5px; color:var(--muted); margin:0 0 2px; font-weight:600; }
+  .greet-name{
+    font-family:'Fraunces', serif; font-size:24px; font-weight:600; margin:0 0 22px;
+  }
+  .mode-list{ display:flex; flex-direction:column; gap:12px; }
+  .mode-card{
+    border:1.5px solid var(--line);
+    border-radius:var(--radius-m);
+    padding:16px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    background:var(--surface);
+    cursor:pointer;
+    transition:border-color .15s ease, transform .15s ease;
+  }
+  .mode-card:hover{ border-color:var(--teal-500); }
+  .mode-icon{
+    width:44px; height:44px; border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .mode-icon svg{ width:22px; height:22px; }
+  .mode-icon.i1{ background:var(--teal-100); }
+  .mode-icon.i2{ background:#FBEED9; }
+  .mode-icon.i3{ background:var(--emergency-100); }
+  .mode-text .t{ font-weight:700; font-size:14.5px; margin-bottom:2px; }
+  .mode-text .d{ font-size:12.5px; color:var(--muted); line-height:1.4; }
+  .mode-arrow{ margin-left:auto; color:var(--muted); flex-shrink:0; }
+  .mode-card.emergency{
+    background:var(--emergency-100);
+    border-color:#EAC4C0;
+  }
+  .mode-card.emergency .t{ color:var(--emergency-dark); }
+
+  /* ===================== SCREEN 3 — Camera / Sign-to-Text ===================== */
+  .cam-header{
+    display:flex; align-items:center; gap:10px; margin-bottom:16px;
+  }
+  .back-btn{
+    width:32px; height:32px; border-radius:9px; border:1.5px solid var(--line);
+    background:var(--surface); display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .cam-title{ font-weight:700; font-size:15px; }
+  .cam-sub{ font-size:11.5px; color:var(--muted); }
+  .viewfinder{
+    background:linear-gradient(155deg, #1B2E2C, #0A1716);
+    border-radius:var(--radius-m);
+    height:280px;
+    position:relative;
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:16px;
+    overflow:hidden;
+  }
+  .corner{
+    position:absolute; width:22px; height:22px;
+    border-color:rgba(255,255,255,0.55);
+  }
+  .corner.tl{ top:14px; left:14px; border-top:2.5px solid; border-left:2.5px solid; border-radius:6px 0 0 0;}
+  .corner.tr{ top:14px; right:14px; border-top:2.5px solid; border-right:2.5px solid; border-radius:0 6px 0 0;}
+  .corner.bl{ bottom:14px; left:14px; border-bottom:2.5px solid; border-left:2.5px solid; border-radius:0 0 0 6px;}
+  .corner.br{ bottom:14px; right:14px; border-bottom:2.5px solid; border-right:2.5px solid; border-radius:0 0 6px 0;}
+  .hand-glyph{ width:56px; height:56px; opacity:0.9; }
+  .live-pill{
+    position:absolute; top:14px; left:50%; transform:translateX(-50%);
+    background:rgba(193,68,59,0.92); color:#fff; font-size:10.5px; font-weight:800;
+    padding:4px 10px; border-radius:20px; display:flex; align-items:center; gap:5px;
+    letter-spacing:.02em;
+  }
+  .live-dot{ width:6px; height:6px; border-radius:50%; background:#fff; animation:pulse 1.4s infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.35;} }
+  .caption-box{
+    background:var(--teal-100);
+    border-radius:var(--radius-s);
+    padding:14px 16px;
+    margin-bottom:16px;
+  }
+  .caption-box .lbl{ font-size:11px; font-weight:700; color:var(--teal-700); margin-bottom:4px; }
+  .caption-box .txt{ font-size:15px; font-weight:600; line-height:1.4; }
+  .cam-controls{ display:flex; gap:10px; margin-top:auto; }
+  .icon-btn{
+    width:48px; height:48px; border-radius:14px; border:1.5px solid var(--line);
+    background:var(--surface); display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .icon-btn.primary{ background:var(--teal-700); border-color:var(--teal-700); }
+  .icon-btn.primary svg path, .icon-btn.primary svg circle{ stroke:#fff; }
+
+  /* ===================== SCREEN 4 — Text/Voice to Sign ===================== */
+  .segmented{
+    display:flex; background:var(--paper); border-radius:12px; padding:4px; margin-bottom:18px;
+  }
+  .seg{
+    flex:1; text-align:center; padding:9px; border-radius:9px; font-size:13px; font-weight:700;
+    color:var(--muted); cursor:pointer; border:none; background:transparent;
+  }
+  .seg.active{ background:var(--surface); color:var(--teal-700); box-shadow:0 1px 3px rgba(0,0,0,0.08); }
+  .input-area{
+    border:1.5px solid var(--line);
+    border-radius:var(--radius-m);
+    padding:16px;
+    min-height:88px;
+    font-size:14px;
+    color:var(--ink);
+    margin-bottom:18px;
+    background:var(--paper);
+  }
+  .input-area.placeholder{ color:var(--muted); }
+  .input-area[contenteditable]:focus{ outline:2px solid var(--teal-500); background:#fff; color:var(--ink); }
+  .input-area[contenteditable]:empty:before{ content:attr(data-placeholder); color:var(--muted); }
+  .mic-row{
+    display:flex; flex-direction:column; align-items:center; gap:10px; padding:20px 0 26px;
+  }
+  .mic-btn{
+    width:64px; height:64px; border-radius:50%;
+    background:var(--amber); display:flex; align-items:center; justify-content:center;
+    box-shadow:0 0 0 8px #FBEED9;
+  }
+  .mic-row .hint{ font-size:12px; color:var(--muted); font-weight:600; }
+  .output-lbl{ font-size:12px; font-weight:700; color:var(--teal-700); margin-bottom:10px; }
+  .sign-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:10px;
+  }
+  .sign-tile{
+    aspect-ratio:1; background:var(--teal-100); border-radius:14px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:4px; font-size:26px; padding:4px;
+  }
+  .sign-tile.letter{ background:#FBEED9; }
+  .sign-tile .glyph{ font-size:24px; line-height:1; }
+  .sign-tile .word{
+    font-size:8.5px; font-weight:700; color:var(--muted); text-transform:uppercase;
+    letter-spacing:.01em;
+  }
+  .sign-empty{
+    grid-column:1/-1; color:var(--muted); font-size:12.5px; text-align:center; padding:18px 0;
+  }
+  .gloss-preview{
+    font-size:11px; font-weight:700; color:var(--teal-600); letter-spacing:.02em;
+    min-height:14px; margin:-6px 0 12px;
+  }
+
+  /* ===================== SCREEN 5 — Emergency ===================== */
+  .emer-body{
+    background:linear-gradient(180deg, #7C241E, #C1443B);
+    border-radius:22px;
+    color:#fff;
+  }
+  .emer-top{ display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+  .emer-badge{
+    width:38px; height:38px; border-radius:12px; background:rgba(255,255,255,0.16);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .emer-eyebrow{ font-size:11.5px; font-weight:800; letter-spacing:.02em; opacity:.85; margin:0; }
+  .emer-headline{ font-family:'Fraunces', serif; font-size:23px; font-weight:600; margin:2px 0 18px; }
+  .loc-card{
+    background:rgba(255,255,255,0.14);
+    border:1px solid rgba(255,255,255,0.25);
+    border-radius:14px;
+    padding:13px 14px;
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:20px;
+  }
+  .loc-card .t{ font-size:13px; font-weight:700; }
+  .loc-card .d{ font-size:11.5px; opacity:.85; }
+  .contact-row{
+    display:flex; flex-direction:column; gap:10px; margin-bottom:18px;
+  }
+  .contact-btn{
+    display:flex; align-items:center; gap:13px;
+    background:#fff;
+    color:var(--ink);
+    border:none; border-radius:16px;
+    padding:14px 16px;
+    cursor:pointer;
+    text-align:left;
+  }
+  .contact-btn .ic{
+    width:42px; height:42px; border-radius:11px;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .contact-btn .ic.police{ background:#DCE7F7; }
+  .contact-btn .ic.fire{ background:#FBE3D3; }
+  .contact-btn .ic.medical{ background:#E1F0E4; }
+  .contact-btn .t{ font-weight:800; font-size:14.5px; }
+  .contact-btn .d{ font-size:11.5px; color:var(--muted); }
+  .contact-btn .callnow{ margin-left:auto; font-size:11px; font-weight:800; color:var(--emergency-dark); }
+  .emer-note{
+    font-size:11.5px; opacity:.8; line-height:1.5; text-align:center; margin-top:auto;
+  }
+  .loc-toast{
+    position:absolute;
+    left:16px; right:16px; bottom:16px;
+    background:rgba(10,10,10,0.82);
+    color:#fff;
+    font-size:12.5px;
+    font-weight:600;
+    line-height:1.4;
+    padding:11px 14px;
+    border-radius:12px;
+    text-align:center;
+    opacity:0;
+    transform:translateY(8px);
+    transition:opacity .25s ease, transform .25s ease;
+    pointer-events:none;
+    z-index:5;
+  }
+  .loc-toast.show{ opacity:1; transform:none; }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <div class="brandbar">
+    <div class="mark">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 4L12 9L17 9" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 12L9 12L9 7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 20L12 15L7 15" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 12L15 12L15 17" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="wordmark">SignSync</div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-screen="s1">Welcome</button>
+    <button class="tab" data-screen="s2">Home</button>
+    <button class="tab" data-screen="s3">Mode 1</button>
+    <button class="tab" data-screen="s4">Mode 2</button>
+    <button class="tab" data-screen="s5">Mode 3</button>
+  </div>
+
+  <!-- ============ SCREEN 1 — WELCOME ============ -->
+  <div class="screen active" id="s1">
+    <div class="phone"><div class="screenbody">
+      <div class="statusdot"></div>
+      <div class="hero-badge">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 4L12 9L17 9" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 12L9 12L9 7" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 20L12 15L7 15" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 12L15 12L15 17" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <p class="eyebrow">Welcome to</p>
+      <h1 class="headline">SignSync</h1>
+      <p class="lede">Real-time sign language translation, text-to-sign, and one-tap emergency help — built to close the communication gap.</p>
+
+      <div class="field">
+        <label>Full name</label>
+        <input type="text" id="nameInput" placeholder="e.g. Asha Rao">
+      </div>
+      <div class="field">
+        <label>Mobile number</label>
+        <input type="text" placeholder="+91 00000 00000">
+      </div>
+
+      <div class="spacer"></div>
+      <button class="btn-primary" data-goto="s2">
+        Get started
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <p class="fineprint">By continuing you agree to SignSync's Terms and Privacy Policy.</p>
+    </div></div>
+  </div>
+
+  <!-- ============ SCREEN 2 — HOME ============ -->
+  <div class="screen" id="s2">
+    <div class="phone"><div class="screenbody">
+      <div class="statusdot"></div>
+      <div class="homebar">
+        <div class="mark"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4L12 9L17 9" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 12L9 12L9 7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 20L12 15L7 15" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 12L15 12L15 17" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="word">SignSync</div>
+        <div class="avatar" id="userAvatar">AR</div>
+      </div>
+
+      <p class="greet-eyebrow">Good afternoon</p>
+      <h2 class="greet-name" id="greetName">Hello, Asha</h2>
+
+      <div class="mode-list">
+        <div class="mode-card" data-goto="s3">
+          <div class="mode-icon i1">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="7" width="14" height="11" rx="2.5" stroke="#0E4749" stroke-width="1.6"/><path d="M17 10.5l4-2.3v7.6l-4-2.3" stroke="#0E4749" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="mode-text">
+            <div class="t">Sign to text</div>
+            <div class="d">Camera reads sign language live</div>
+          </div>
+          <svg class="mode-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+
+        <div class="mode-card" data-goto="s4">
+          <div class="mode-icon i2">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12M8 9l4-4 4 4" stroke="#B87A1D" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 15v2a3 3 0 003 3h6a3 3 0 003-3v-2" stroke="#B87A1D" stroke-width="1.7" stroke-linecap="round"/></svg>
+          </div>
+          <div class="mode-text">
+            <div class="t">Text or voice to sign</div>
+            <div class="d">Type or speak — get sign pictures</div>
+          </div>
+          <svg class="mode-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+
+        <div class="mode-card emergency" data-goto="s5">
+          <div class="mode-icon i3">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z" stroke="#8F2E28" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 8v5M12 15.5v.01" stroke="#8F2E28" stroke-width="1.7" stroke-linecap="round"/></svg>
+          </div>
+          <div class="mode-text">
+            <div class="t">Emergency mode</div>
+            <div class="d">Police, fire or ambulance with location</div>
+          </div>
+          <svg class="mode-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ============ SCREEN 3 — CAMERA / SIGN TO TEXT ============ -->
+  <div class="screen" id="s3">
+    <div class="phone"><div class="screenbody">
+      <div class="statusdot"></div>
+      <div class="cam-header">
+        <div class="back-btn" data-goto="s2"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="#16211F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <div class="cam-title">Sign to text</div>
+          <div class="cam-sub">Mode 1 · Camera translation</div>
+        </div>
+      </div>
+
+      <div class="viewfinder">
+        <div class="live-pill" id="livePill"><span class="live-dot"></span>LIVE</div>
+        <div class="corner tl"></div><div class="corner tr"></div>
+        <div class="corner bl"></div><div class="corner br"></div>
+        <svg class="hand-glyph" viewBox="0 0 24 24" fill="none"><path d="M12 4L12 9L17 9" stroke="rgba(255,255,255,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 12L9 12L9 7" stroke="rgba(255,255,255,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 20L12 15L7 15" stroke="rgba(255,255,255,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 12L15 12L15 17" stroke="rgba(255,255,255,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+
+      <div class="caption-box">
+        <div class="lbl">Translated text</div>
+        <div class="txt" id="captionTxt">"Where is the nearest pharmacy?"</div>
+      </div>
+
+      <div class="cam-controls">
+        <div class="icon-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 8a2 2 0 012-2h2l1.5-2h5L16 6h2a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2V8Z" stroke="#16211F" stroke-width="1.6"/><circle cx="12" cy="13" r="3.2" stroke="#16211F" stroke-width="1.6"/></svg></div>
+        <div class="icon-btn primary" id="captureBtn" style="flex:1;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="5" y="5" width="14" height="14" rx="3" stroke="#fff" stroke-width="1.8"/></svg>
+        </div>
+        <div class="icon-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 9l4 3-4 3M14 9h4M14 12h4M14 15h4" stroke="#16211F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ============ SCREEN 4 — TEXT/VOICE TO SIGN ============ -->
+  <div class="screen" id="s4">
+    <div class="phone"><div class="screenbody">
+      <div class="statusdot"></div>
+      <p class="eyebrow">Mode 2</p>
+      <h1 class="headline" style="font-size:22px;">Text or voice to sign</h1>
+      <p class="lede" style="margin-bottom:18px;">Speak or type a phrase and see it rendered as sign pictures.</p>
+
+      <div class="segmented">
+        <button class="seg" data-panel="text" id="segText">Text</button>
+        <button class="seg active" data-panel="voice" id="segVoice">Voice</button>
+      </div>
+
+      <div class="input-area placeholder" id="textPanel" contenteditable="true" data-placeholder="Type a phrase, e.g. Where is the nearest pharmacy?" style="display:none;"></div>
+
+      <div class="mic-row" id="voicePanel">
+        <div class="mic-btn" id="micBtn">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="9" y="3" width="6" height="11" rx="3" stroke="#5C3A0B" stroke-width="1.7"/><path d="M6 11a6 6 0 0012 0M12 19v2" stroke="#5C3A0B" stroke-width="1.7" stroke-linecap="round"/></svg>
+        </div>
+        <div class="hint" id="micHint">Tap to start listening</div>
+      </div>
+
+      <div class="gloss-preview" id="glossPreview"></div>
+      <div class="output-lbl">Sign output</div>
+      <div class="sign-grid" id="signGrid">
+        <p class="sign-empty">Type or say a phrase to see it in sign.</p>
+      </div>
+      <p class="fineprint" style="margin-top:16px;">No exact sign found? SignSync fingerspells it letter by letter.</p>
+    </div></div>
+  </div>
+
+  <!-- ============ SCREEN 5 — EMERGENCY ============ -->
+  <div class="screen" id="s5">
+    <div class="phone"><div class="screenbody emer-body" style="padding:26px 20px 24px;">
+      <div class="emer-top">
+        <div class="emer-badge"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+      </div>
+      <p class="emer-eyebrow">MODE 3 · EMERGENCY</p>
+      <h2 class="emer-headline">Help is one tap away</h2>
+
+      <div class="loc-card">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 21s7-6.5 7-11.5A7 7 0 105 9.5C5 14.5 12 21 12 21Z" stroke="#fff" stroke-width="1.6"/><circle cx="12" cy="9.5" r="2.3" stroke="#fff" stroke-width="1.6"/></svg>
+        <div>
+          <div class="t">Live location is on</div>
+          <div class="d">Shared automatically the moment you call</div>
+        </div>
+      </div>
+
+      <div class="contact-row">
+        <button class="contact-btn" data-service="Police" data-tel="112">
+          <div class="ic police"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z" stroke="#2D5A96" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+          <div>
+            <div class="t">Police</div>
+            <div class="d">Call with location notification</div>
+          </div>
+          <div class="callnow">CALL</div>
+        </button>
+
+        <button class="contact-btn" data-service="Fire brigade" data-tel="101">
+          <div class="ic fire"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3c1 3-2 4-2 6.5A2.5 2.5 0 0012.5 12c1.5 0 2.2-1 2.2-1s1.3 1.4 1.3 3.5A4 4 0 0112 18a4.5 4.5 0 01-4.5-4.5c0-3 2-3.5 2-6C9.5 6 11 4.5 12 3Z" stroke="#B65B1F" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+          <div>
+            <div class="t">Fire brigade</div>
+            <div class="d">Call with location notification</div>
+          </div>
+          <div class="callnow">CALL</div>
+        </button>
+
+        <button class="contact-btn" data-service="Ambulance" data-tel="108">
+          <div class="ic medical"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 8a2 2 0 012-2h12a2 2 0 012 2v9a2 2 0 01-2 2H6a2 2 0 01-2-2V8Z" stroke="#2E7D46" stroke-width="1.5"/><path d="M12 9v6M9 12h6" stroke="#2E7D46" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <div>
+            <div class="t">Ambulance</div>
+            <div class="d">Call with location notification</div>
+          </div>
+          <div class="callnow">CALL</div>
+        </button>
+      </div>
+
+      <p class="emer-note">Location permission (GPS) is requested the first time you open Emergency Mode, and can be shared live during any active call.</p>
+
+      <div class="loc-toast" id="locToast"></div>
+    </div></div>
+  </div>
+
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const screens = document.querySelectorAll('.screen');
+
+  function navigate(screenId){
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.screen === screenId));
+    screens.forEach(s => s.classList.toggle('active', s.id === screenId));
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => navigate(tab.dataset.screen));
+  });
+
+  document.querySelectorAll('[data-goto]').forEach(el => {
+    el.addEventListener('click', () => navigate(el.dataset.goto));
+  });
+
+  // ---- Personalize Home screen from the Welcome name field ----
+  const nameInput  = document.getElementById('nameInput');
+  const greetName  = document.getElementById('greetName');
+  const userAvatar = document.getElementById('userAvatar');
+
+  function getInitials(fullName){
+    const parts = fullName.trim().split(/\s+/).filter(Boolean);
+    if(parts.length === 0) return 'AR';
+    if(parts.length === 1) return parts[0].slice(0,2).toUpperCase();
+    return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
+  }
+
+  function applyName(){
+    const fullName = nameInput.value.trim();
+    if(!fullName){
+      greetName.textContent = 'Hello, Asha';
+      userAvatar.textContent = 'AR';
+      return;
+    }
+    const firstName = fullName.split(/\s+/)[0];
+    greetName.textContent = 'Hello, ' + firstName;
+    userAvatar.textContent = getInitials(fullName);
+  }
+
+  // Update live as the user types, and also right before moving to Home
+  nameInput.addEventListener('input', applyName);
+  document.querySelector('.btn-primary[data-goto="s2"]').addEventListener('click', applyName);
+</script>
+
+<script>
+  /* ============ Mode 2 — Text/Voice to Sign: real pipeline ============ */
+
+  // ---- Sign vocabulary (same data as dictionary.js) ----
+  const SIGN_DICTIONARY = {
+    "i":{"type":"emoji","asset":"👆"},"me":{"type":"emoji","asset":"👆"},"you":{"type":"emoji","asset":"👉"},
+    "he":{"type":"emoji","asset":"🙋‍♂️"},"she":{"type":"emoji","asset":"🙋‍♀️"},"we":{"type":"emoji","asset":"👥"},
+    "they":{"type":"emoji","asset":"👥"},"it":{"type":"emoji","asset":"👇"},"this":{"type":"emoji","asset":"👇"},
+    "that":{"type":"emoji","asset":"👉"},"my":{"type":"emoji","asset":"👆"},"your":{"type":"emoji","asset":"👉"},
+    "his":{"type":"emoji","asset":"🙋‍♂️"},"her":{"type":"emoji","asset":"🙋‍♀️"},"hello":{"type":"emoji","asset":"👋"},
+    "hi":{"type":"emoji","asset":"👋"},"bye":{"type":"emoji","asset":"👋"},"goodbye":{"type":"emoji","asset":"👋"},
+    "please":{"type":"emoji","asset":"🙏"},"thank":{"type":"emoji","asset":"🙏"},"thanks":{"type":"emoji","asset":"🙏"},
+    "sorry":{"type":"emoji","asset":"😔"},"welcome":{"type":"emoji","asset":"🤗"},"yes":{"type":"emoji","asset":"👍"},
+    "no":{"type":"emoji","asset":"🚫"},"maybe":{"type":"emoji","asset":"🤷"},"ok":{"type":"emoji","asset":"👌"},
+    "okay":{"type":"emoji","asset":"👌"},"fine":{"type":"emoji","asset":"👌"},"need":{"type":"emoji","asset":"❗"},
+    "want":{"type":"emoji","asset":"🙋"},"have":{"type":"emoji","asset":"✋"},"has":{"type":"emoji","asset":"✋"},
+    "go":{"type":"emoji","asset":"👉"},"going":{"type":"emoji","asset":"👉"},"come":{"type":"emoji","asset":"👋"},
+    "coming":{"type":"emoji","asset":"👋"},"eat":{"type":"emoji","asset":"🍽️"},"drink":{"type":"emoji","asset":"🥤"},
+    "sleep":{"type":"emoji","asset":"😴"},"work":{"type":"emoji","asset":"💼"},"help":{"type":"emoji","asset":"🆘"},
+    "call":{"type":"emoji","asset":"📞"},"wait":{"type":"emoji","asset":"🖐️"},"stop":{"type":"emoji","asset":"✋"},
+    "understand":{"type":"emoji","asset":"💡"},"know":{"type":"emoji","asset":"🧠"},"think":{"type":"emoji","asset":"🤔"},
+    "feel":{"type":"emoji","asset":"🫱"},"like":{"type":"emoji","asset":"👍"},"love":{"type":"emoji","asset":"❤️"},
+    "hate":{"type":"emoji","asset":"👎"},"see":{"type":"emoji","asset":"👀"},"look":{"type":"emoji","asset":"👀"},
+    "hear":{"type":"emoji","asset":"👂"},"listen":{"type":"emoji","asset":"👂"},"speak":{"type":"emoji","asset":"🗣️"},
+    "talk":{"type":"emoji","asset":"🗣️"},"walk":{"type":"emoji","asset":"🚶"},"run":{"type":"emoji","asset":"🏃"},
+    "sit":{"type":"emoji","asset":"🪑"},"stand":{"type":"emoji","asset":"🧍"},"open":{"type":"emoji","asset":"🔓"},
+    "close":{"type":"emoji","asset":"🔒"},"give":{"type":"emoji","asset":"🤲"},"take":{"type":"emoji","asset":"🤏"},
+    "buy":{"type":"emoji","asset":"🛒"},"sell":{"type":"emoji","asset":"🏷️"},"pay":{"type":"emoji","asset":"💳"},
+    "wash":{"type":"emoji","asset":"🧼"},"clean":{"type":"emoji","asset":"🧹"},"cook":{"type":"emoji","asset":"🍳"},
+    "drive":{"type":"emoji","asset":"🚗"},"read":{"type":"emoji","asset":"📖"},"write":{"type":"emoji","asset":"✍️"},
+    "learn":{"type":"emoji","asset":"📚"},"teach":{"type":"emoji","asset":"🧑‍🏫"},"find":{"type":"emoji","asset":"🔍"},
+    "lost":{"type":"emoji","asset":"❓"},"start":{"type":"emoji","asset":"▶️"},"finish":{"type":"emoji","asset":"🏁"},
+    "bring":{"type":"emoji","asset":"🤲"},"share":{"type":"emoji","asset":"🤝"},"ask":{"type":"emoji","asset":"❓"},
+    "tell":{"type":"emoji","asset":"🗣️"},"show":{"type":"emoji","asset":"👉"},"meet":{"type":"emoji","asset":"🤝"},
+    "live":{"type":"emoji","asset":"🏠"},"stay":{"type":"emoji","asset":"🖐️"},"emergency":{"type":"emoji","asset":"🚨"},
+    "danger":{"type":"emoji","asset":"⚠️"},"safe":{"type":"emoji","asset":"🛡️"},"careful":{"type":"emoji","asset":"⚠️"},
+    "hurry":{"type":"emoji","asset":"⏱️"},"fire":{"type":"emoji","asset":"🔥"},"police":{"type":"emoji","asset":"👮"},
+    "ambulance":{"type":"emoji","asset":"🚑"},"hospital":{"type":"emoji","asset":"🏥"},"doctor":{"type":"emoji","asset":"🩺"},
+    "medicine":{"type":"emoji","asset":"💊"},"pain":{"type":"emoji","asset":"😣"},"hurt":{"type":"emoji","asset":"🤕"},
+    "sick":{"type":"emoji","asset":"🤒"},"bleeding":{"type":"emoji","asset":"🩸"},"accident":{"type":"emoji","asset":"💥"},
+    "rescue":{"type":"emoji","asset":"🆘"},"good":{"type":"emoji","asset":"👍"},"bad":{"type":"emoji","asset":"👎"},
+    "happy":{"type":"emoji","asset":"😊"},"sad":{"type":"emoji","asset":"😢"},"angry":{"type":"emoji","asset":"😠"},
+    "scared":{"type":"emoji","asset":"😨"},"tired":{"type":"emoji","asset":"😴"},"hungry":{"type":"emoji","asset":"🍽️"},
+    "thirsty":{"type":"emoji","asset":"💧"},"worried":{"type":"emoji","asset":"😟"},"nervous":{"type":"emoji","asset":"😬"},
+    "calm":{"type":"emoji","asset":"😌"},"excited":{"type":"emoji","asset":"🤩"},"confused":{"type":"emoji","asset":"😕"},
+    "proud":{"type":"emoji","asset":"😌"},"what":{"type":"emoji","asset":"❓"},"when":{"type":"emoji","asset":"❓"},
+    "where":{"type":"emoji","asset":"❓"},"who":{"type":"emoji","asset":"❓"},"why":{"type":"emoji","asset":"❓"},
+    "how":{"type":"emoji","asset":"❓"},"which":{"type":"emoji","asset":"❓"},"one":{"type":"emoji","asset":"1️⃣"},
+    "two":{"type":"emoji","asset":"2️⃣"},"three":{"type":"emoji","asset":"3️⃣"},"four":{"type":"emoji","asset":"4️⃣"},
+    "five":{"type":"emoji","asset":"5️⃣"},"six":{"type":"emoji","asset":"6️⃣"},"seven":{"type":"emoji","asset":"7️⃣"},
+    "eight":{"type":"emoji","asset":"8️⃣"},"nine":{"type":"emoji","asset":"9️⃣"},"ten":{"type":"emoji","asset":"🔟"},
+    "now":{"type":"emoji","asset":"⏱️"},"today":{"type":"emoji","asset":"📅"},"tomorrow":{"type":"emoji","asset":"📅"},
+    "yesterday":{"type":"emoji","asset":"📅"},"morning":{"type":"emoji","asset":"🌅"},"afternoon":{"type":"emoji","asset":"🌤️"},
+    "evening":{"type":"emoji","asset":"🌆"},"night":{"type":"emoji","asset":"🌙"},"time":{"type":"emoji","asset":"⏰"},
+    "day":{"type":"emoji","asset":"📅"},"week":{"type":"emoji","asset":"🗓️"},"later":{"type":"emoji","asset":"⏳"},
+    "soon":{"type":"emoji","asset":"⏳"},"water":{"type":"emoji","asset":"💧"},"food":{"type":"emoji","asset":"🍚"},
+    "home":{"type":"emoji","asset":"🏠"},"house":{"type":"emoji","asset":"🏠"},"school":{"type":"emoji","asset":"🏫"},
+    "bathroom":{"type":"emoji","asset":"🚻"},"family":{"type":"emoji","asset":"👨‍👩‍👧"},"friend":{"type":"emoji","asset":"🤝"},
+    "mother":{"type":"emoji","asset":"👩"},"father":{"type":"emoji","asset":"👨"},"brother":{"type":"emoji","asset":"👦"},
+    "sister":{"type":"emoji","asset":"👧"},"baby":{"type":"emoji","asset":"👶"},"child":{"type":"emoji","asset":"🧒"},
+    "man":{"type":"emoji","asset":"🧑"},"woman":{"type":"emoji","asset":"🧑"},"people":{"type":"emoji","asset":"👥"},
+    "name":{"type":"emoji","asset":"🪪"},"phone":{"type":"emoji","asset":"📱"},"money":{"type":"emoji","asset":"💰"},
+    "car":{"type":"emoji","asset":"🚗"},"bus":{"type":"emoji","asset":"🚌"},"train":{"type":"emoji","asset":"🚆"},
+    "location":{"type":"emoji","asset":"📍"},"nearest":{"type":"emoji","asset":"📍"},"here":{"type":"emoji","asset":"📍"},
+    "there":{"type":"emoji","asset":"👉"},"street":{"type":"emoji","asset":"🛣️"},"shop":{"type":"emoji","asset":"🏬"},
+    "pharmacy":{"type":"emoji","asset":"💊"},"can":{"type":"emoji","asset":"💪"},"cannot":{"type":"emoji","asset":"🚫"},
+    "cant":{"type":"emoji","asset":"🚫"},"must":{"type":"emoji","asset":"❗"},"more":{"type":"emoji","asset":"➕"},
+    "less":{"type":"emoji","asset":"➖"},"all":{"type":"emoji","asset":"💯"},"some":{"type":"emoji","asset":"🤏"},
+    "big":{"type":"emoji","asset":"📏"},"small":{"type":"emoji","asset":"🤏"},"hot":{"type":"emoji","asset":"🔥"},
+    "cold":{"type":"emoji","asset":"🥶"},"new":{"type":"emoji","asset":"✨"},"old":{"type":"emoji","asset":"👴"},
+    "fast":{"type":"emoji","asset":"⚡"},"slow":{"type":"emoji","asset":"🐢"},"easy":{"type":"emoji","asset":"😌"},
+    "hard":{"type":"emoji","asset":"😖"},"right":{"type":"emoji","asset":"➡️"},"wrong":{"type":"emoji","asset":"❌"}
+  };
+
+  // ---- Gloss reordering (same logic as gloss.js) ----
+  const DROP_WORDS = new Set(["a","an","the","is","are","am","was","were","be","been","do","does","did","to","of","for"]);
+  const QUESTION_WORDS = new Set(["what","where","when","who","why","how"]);
+
+  function tokenize(sentence){
+    return sentence.toLowerCase().replace(/[^\w\s]/g,"").split(/\s+/).filter(Boolean);
+  }
+  function toGloss(sentence){
+    const tokens = tokenize(sentence);
+    const question = tokens.filter(t => QUESTION_WORDS.has(t));
+    const rest = tokens.filter(t => !QUESTION_WORDS.has(t) && !DROP_WORDS.has(t));
+    return [...rest, ...question];
+  }
+  function lookupSign(word){ return SIGN_DICTIONARY[word] || null; }
+  function fingerspell(word){
+    return word.split("").map(letter => ({ type:"letter", asset: letter.toUpperCase() }));
+  }
+  function translateToSigns(sentence){
+    const gloss = toGloss(sentence);
+    const signs = gloss.flatMap(word => {
+      const match = lookupSign(word);
+      if (match) return [{ word, ...match }];
+      return fingerspell(word).map(f => ({ word, ...f }));
+    });
+    return { gloss, signs };
+  }
+
+  // ---- Render into the Mode 2 screen ----
+  const signGrid = document.getElementById('signGrid');
+  const glossPreview = document.getElementById('glossPreview');
+
+  function renderMode2(sentence){
+    if (!sentence || !sentence.trim()){
+      glossPreview.textContent = '';
+      signGrid.innerHTML = '<p class="sign-empty">Type or say a phrase to see it in sign.</p>';
+      return;
+    }
+    const { gloss, signs } = translateToSigns(sentence);
+    glossPreview.textContent = gloss.length ? 'Gloss: ' + gloss.join(' · ').toUpperCase() : '';
+    if (signs.length === 0){
+      signGrid.innerHTML = '<p class="sign-empty">Type or say a phrase to see it in sign.</p>';
+      return;
+    }
+    signGrid.innerHTML = signs.map(s => `
+      <div class="sign-tile${s.type === 'letter' ? ' letter' : ''}">
+        <span class="glyph">${s.asset}</span>
+        <span class="word">${s.word}</span>
+      </div>
+    `).join('');
+  }
+
+  // ---- Text / Voice segmented toggle ----
+  const segText = document.getElementById('segText');
+  const segVoice = document.getElementById('segVoice');
+  const textPanel = document.getElementById('textPanel');
+  const voicePanel = document.getElementById('voicePanel');
+
+  function showTextPanel(){
+    segText.classList.add('active');
+    segVoice.classList.remove('active');
+    textPanel.style.display = '';
+    voicePanel.style.display = 'none';
+  }
+  function showVoicePanel(){
+    segVoice.classList.add('active');
+    segText.classList.remove('active');
+    voicePanel.style.display = '';
+    textPanel.style.display = 'none';
+  }
+  segText.addEventListener('click', showTextPanel);
+  segVoice.addEventListener('click', showVoicePanel);
+
+  // Typing in the text panel translates live (debounced), Enter translates immediately.
+  let debounceTimer = null;
+  textPanel.addEventListener('input', () => {
+    textPanel.classList.toggle('placeholder', textPanel.textContent.trim() === '');
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => renderMode2(textPanel.textContent), 350);
+  });
+  textPanel.addEventListener('keydown', e => {
+    if (e.key === 'Enter'){
+      e.preventDefault();
+      clearTimeout(debounceTimer);
+      renderMode2(textPanel.textContent);
+    }
+  });
+
+  // ---- Mic button: real speech recognition (Web Speech API) ----
+  const micBtn = document.getElementById('micBtn');
+  const micHint = document.getElementById('micHint');
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition){
+    micHint.textContent = 'Voice input needs Chrome or Edge — try Text instead.';
+  } else {
+    const recognizer = new SpeechRecognition();
+    recognizer.lang = 'en-US';
+    recognizer.interimResults = false;
+    let listening = false;
+
+    micBtn.addEventListener('click', () => {
+      if (listening){ recognizer.stop(); return; }
+      recognizer.start();
+    });
+    recognizer.addEventListener('start', () => {
+      listening = true;
+      micBtn.style.boxShadow = '0 0 0 8px #FBEED9, 0 0 0 12px var(--amber)';
+      micHint.textContent = 'Listening…';
+    });
+    recognizer.addEventListener('result', event => {
+      const transcript = event.results[0][0].transcript;
+      renderMode2(transcript);
+      micHint.textContent = '"' + transcript + '"';
+    });
+    recognizer.addEventListener('end', () => {
+      listening = false;
+      micBtn.style.boxShadow = '';
+      if (micHint.textContent === 'Listening…') micHint.textContent = 'Tap to start listening';
+    });
+    recognizer.addEventListener('error', event => {
+      listening = false;
+      micBtn.style.boxShadow = '';
+      micHint.textContent = 'Mic error: ' + event.error;
+    });
+  }
+
+  // Start on the empty state.
+  renderMode2('');
+
+  // ---- Mode 3 — Emergency: share live location, then place the call ----
+  const locToast = document.getElementById('locToast');
+  let toastTimer = null;
+
+  function showToast(msg, duration = 3200){
+    if (!locToast) return;
+    locToast.textContent = msg;
+    locToast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => locToast.classList.remove('show'), duration);
+  }
+
+  function placeCall(number){
+    window.location.href = 'tel:' + number;
+  }
+
+  // NOTE: a webpage cannot silently transmit GPS data over the phone
+  // network — there's no browser API for that. This flow gets the
+  // device's location, opens the native SMS app pre-addressed to the
+  // same number with a maps link (the closest thing to "sending" location
+  // from a browser), then dials. A real deployment would forward the
+  // coordinates via a backend / carrier or emergency-services API instead
+  // of depending on the user's SMS app.
+  function callWithLocation(btn){
+    const number = btn.dataset.tel;
+    const service = btn.dataset.service || 'emergency services';
+    const label = btn.querySelector('.callnow');
+    const originalLabel = label ? label.textContent : 'CALL';
+
+    if (!navigator.geolocation){
+      showToast('Location isn\u2019t available on this device — calling ' + service + ' now.');
+      placeCall(number);
+      return;
+    }
+
+    if (label) label.textContent = 'LOCATING…';
+
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        const { latitude, longitude } = position.coords;
+        const mapsLink = 'https://maps.google.com/?q=' + latitude + ',' + longitude;
+        const smsBody = encodeURIComponent(
+          'SignSync emergency alert: I need help. My live location: ' + mapsLink
+        );
+
+        if (label) label.textContent = 'SHARING…';
+        showToast('Live location shared with ' + service + '.');
+
+        // Hand the location off via the device's SMS app, addressed to
+        // the same number, then place the call shortly after.
+        window.open('sms:' + number + '?&body=' + smsBody, '_blank');
+
+        setTimeout(() => {
+          if (label) label.textContent = originalLabel;
+          placeCall(number);
+        }, 900);
+      },
+      error => {
+        if (label) label.textContent = originalLabel;
+        showToast('Couldn\u2019t get your location (' + error.message + ') — calling ' + service + ' anyway.');
+        placeCall(number);
+      },
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
+  }
+
+  document.querySelectorAll('.contact-btn[data-tel]').forEach(btn => {
+    btn.addEventListener('click', () => callWithLocation(btn));
+  });
+</script>
+
+</body>
+</html>

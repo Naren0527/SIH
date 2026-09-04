@@ -1,0 +1,142 @@
+/**
+ * dictionary.js — sign vocabulary embedded directly as a JS object.
+ * 
+ * Expanded dictionary for maximum word prediction.
+ * Assets are placeholder emoji for now. Replace `asset` with a real
+ * video/GIF/image URL (e.g., "clips/hello.mp4") once you have actual footage.
+ */
+window.SIGN_DICTIONARY = {
+  // --- PRONOUNS & PEOPLE ---
+  "i": {"type":"emoji","asset":"👆"}, "me": {"type":"emoji","asset":"👆"}, 
+  "you": {"type":"emoji","asset":"👉"}, "he": {"type":"emoji","asset":"🙋‍♂️"}, 
+  "she": {"type":"emoji","asset":"🙋‍♀️"}, "we": {"type":"emoji","asset":"👥"},
+  "they": {"type":"emoji","asset":"👥"}, "it": {"type":"emoji","asset":"👇"}, 
+  "this": {"type":"emoji","asset":"👇"}, "that": {"type":"emoji","asset":"👉"}, 
+  "my": {"type":"emoji","asset":"👆"}, "your": {"type":"emoji","asset":"👉"},
+  "his": {"type":"emoji","asset":"🙋‍♂️"}, "her": {"type":"emoji","asset":"🙋‍♀️"},
+  "man": {"type":"emoji","asset":"🧑"}, "woman": {"type":"emoji","asset":"🧑"}, 
+  "people": {"type":"emoji","asset":"👥"}, "family": {"type":"emoji","asset":"👨‍👩‍👧"}, 
+  "friend": {"type":"emoji","asset":"🤝"}, "mother": {"type":"emoji","asset":"👩"}, 
+  "father": {"type":"emoji","asset":"👨"}, "brother": {"type":"emoji","asset":"👦"}, 
+  "sister": {"type":"emoji","asset":"👧"}, "baby": {"type":"emoji","asset":"👶"}, 
+  "child": {"type":"emoji","asset":"🧒"}, 
+
+  // --- GREETINGS & MANNERS ---
+  "hello": {"type":"emoji","asset":"👋"}, "hi": {"type":"emoji","asset":"👋"}, 
+  "bye": {"type":"emoji","asset":"👋"}, "goodbye": {"type":"emoji","asset":"👋"},
+  "please": {"type":"emoji","asset":"🙏"}, "thank": {"type":"emoji","asset":"🙏"}, 
+  "thanks": {"type":"emoji","asset":"🙏"}, "sorry": {"type":"emoji","asset":"😔"}, 
+  "welcome": {"type":"emoji","asset":"🤗"}, "yes": {"type":"emoji","asset":"👍"},
+  "no": {"type":"emoji","asset":"🚫"}, "maybe": {"type":"emoji","asset":"🤷"}, 
+  "ok": {"type":"emoji","asset":"👌"}, "okay": {"type":"emoji","asset":"👌"}, 
+  "fine": {"type":"emoji","asset":"👌"},
+
+  // --- QUESTIONS ---
+  "what": {"type":"emoji","asset":"❓"}, "when": {"type":"emoji","asset":"❓"},
+  "where": {"type":"emoji","asset":"❓"}, "who": {"type":"emoji","asset":"❓"}, 
+  "why": {"type":"emoji","asset":"❓"}, "how": {"type":"emoji","asset":"❓"}, 
+  "which": {"type":"emoji","asset":"❓"},
+
+  // --- VERBS & ACTIONS ---
+  "need": {"type":"emoji","asset":"❗"}, "want": {"type":"emoji","asset":"🙋"}, 
+  "have": {"type":"emoji","asset":"✋"}, "has": {"type":"emoji","asset":"✋"},
+  "go": {"type":"emoji","asset":"👉"}, "going": {"type":"emoji","asset":"👉"}, 
+  "come": {"type":"emoji","asset":"👋"}, "coming": {"type":"emoji","asset":"👋"},
+  "eat": {"type":"emoji","asset":"🍽️"}, "drink": {"type":"emoji","asset":"🥤"}, 
+  "sleep": {"type":"emoji","asset":"😴"}, "work": {"type":"emoji","asset":"💼"}, 
+  "help": {"type":"emoji","asset":"🆘"}, "call": {"type":"emoji","asset":"📞"}, 
+  "wait": {"type":"emoji","asset":"🖐️"}, "stop": {"type":"emoji","asset":"✋"},
+  "understand": {"type":"emoji","asset":"💡"}, "know": {"type":"emoji","asset":"🧠"}, 
+  "think": {"type":"emoji","asset":"🤔"}, "feel": {"type":"emoji","asset":"🫱"}, 
+  "like": {"type":"emoji","asset":"👍"}, "love": {"type":"emoji","asset":"❤️"}, 
+  "hate": {"type":"emoji","asset":"👎"}, "see": {"type":"emoji","asset":"👀"}, 
+  "look": {"type":"emoji","asset":"👀"}, "hear": {"type":"emoji","asset":"👂"}, 
+  "listen": {"type":"emoji","asset":"👂"}, "speak": {"type":"emoji","asset":"🗣️"}, 
+  "talk": {"type":"emoji","asset":"🗣️"}, "walk": {"type":"emoji","asset":"🚶"}, 
+  "run": {"type":"emoji","asset":"🏃"}, "sit": {"type":"emoji","asset":"🪑"}, 
+  "stand": {"type":"emoji","asset":"🧍"}, "open": {"type":"emoji","asset":"🔓"}, 
+  "close": {"type":"emoji","asset":"🔒"}, "give": {"type":"emoji","asset":"🤲"}, 
+  "take": {"type":"emoji","asset":"🤏"}, "buy": {"type":"emoji","asset":"🛒"}, 
+  "sell": {"type":"emoji","asset":"🏷️"}, "pay": {"type":"emoji","asset":"💳"}, 
+  "wash": {"type":"emoji","asset":"🧼"}, "clean": {"type":"emoji","asset":"🧹"}, 
+  "cook": {"type":"emoji","asset":"🍳"}, "drive": {"type":"emoji","asset":"🚗"}, 
+  "read": {"type":"emoji","asset":"📖"}, "write": {"type":"emoji","asset":"✍️"},
+  "learn": {"type":"emoji","asset":"📚"}, "teach": {"type":"emoji","asset":"🧑‍🏫"}, 
+  "find": {"type":"emoji","asset":"🔍"}, "lost": {"type":"emoji","asset":"❓"}, 
+  "start": {"type":"emoji","asset":"▶️"}, "finish": {"type":"emoji","asset":"🏁"},
+  "bring": {"type":"emoji","asset":"🤲"}, "share": {"type":"emoji","asset":"🤝"}, 
+  "ask": {"type":"emoji","asset":"❓"}, "tell": {"type":"emoji","asset":"🗣️"}, 
+  "show": {"type":"emoji","asset":"👉"}, "meet": {"type":"emoji","asset":"🤝"}, 
+  "live": {"type":"emoji","asset":"🏠"}, "stay": {"type":"emoji","asset":"🖐️"},
+
+  // --- EMERGENCY & MEDICAL ---
+  "emergency": {"type":"emoji","asset":"🚨"}, "danger": {"type":"emoji","asset":"⚠️"}, 
+  "safe": {"type":"emoji","asset":"🛡️"}, "careful": {"type":"emoji","asset":"⚠️"}, 
+  "hurry": {"type":"emoji","asset":"⏱️"}, "fire": {"type":"emoji","asset":"🔥"}, 
+  "police": {"type":"emoji","asset":"👮"}, "ambulance": {"type":"emoji","asset":"🚑"}, 
+  "hospital": {"type":"emoji","asset":"🏥"}, "doctor": {"type":"emoji","asset":"🩺"}, 
+  "medicine": {"type":"emoji","asset":"💊"}, "pain": {"type":"emoji","asset":"😣"}, 
+  "hurt": {"type":"emoji","asset":"🤕"}, "sick": {"type":"emoji","asset":"🤒"}, 
+  "bleeding": {"type":"emoji","asset":"🩸"}, "accident": {"type":"emoji","asset":"💥"}, 
+  "rescue": {"type":"emoji","asset":"🆘"}, "head": {"type":"emoji", "asset": "🤕"},
+  "chest": {"type":"emoji", "asset": "🫁"}, "stomach": {"type":"emoji", "asset": "🤢"},
+  "blood": {"type":"emoji", "asset": "🩸"}, "fever": {"type":"emoji", "asset": "🤒"},
+  "bandage": {"type":"emoji", "asset": "🩹"}, "pill": {"type":"emoji", "asset": "💊"},
+  "prescription": {"type":"emoji", "asset": "📋"},
+
+  // --- EMOTIONS & STATES ---
+  "good": {"type":"emoji","asset":"👍"}, "bad": {"type":"emoji","asset":"👎"},
+  "happy": {"type":"emoji","asset":"😊"}, "sad": {"type":"emoji","asset":"😢"}, 
+  "angry": {"type":"emoji","asset":"😠"}, "scared": {"type":"emoji","asset":"😨"}, 
+  "tired": {"type":"emoji","asset":"😴"}, "hungry": {"type":"emoji","asset":"🍽️"}, 
+  "thirsty": {"type":"emoji","asset":"💧"}, "worried": {"type":"emoji","asset":"😟"}, 
+  "nervous": {"type":"emoji","asset":"😬"}, "calm": {"type":"emoji","asset":"😌"}, 
+  "excited": {"type":"emoji","asset":"🤩"}, "confused": {"type":"emoji","asset":"😕"}, 
+  "proud": {"type":"emoji","asset":"😌"}, "hot": {"type":"emoji","asset":"🔥"}, 
+  "cold": {"type":"emoji","asset":"🥶"},
+
+  // --- TIME & NUMBERS ---
+  "one": {"type":"emoji","asset":"1️⃣"}, "two": {"type":"emoji","asset":"2️⃣"}, 
+  "three": {"type":"emoji","asset":"3️⃣"}, "four": {"type":"emoji","asset":"4️⃣"}, 
+  "five": {"type":"emoji","asset":"5️⃣"}, "six": {"type":"emoji","asset":"6️⃣"}, 
+  "seven": {"type":"emoji","asset":"7️⃣"}, "eight": {"type":"emoji","asset":"8️⃣"}, 
+  "nine": {"type":"emoji","asset":"9️⃣"}, "ten": {"type":"emoji","asset":"🔟"},
+  "now": {"type":"emoji","asset":"⏱️"}, "today": {"type":"emoji","asset":"📅"}, 
+  "tomorrow": {"type":"emoji","asset":"📅"}, "yesterday": {"type":"emoji","asset":"📅"}, 
+  "morning": {"type":"emoji","asset":"🌅"}, "afternoon": {"type":"emoji","asset":"🌤️"}, 
+  "evening": {"type":"emoji","asset":"🌆"}, "night": {"type":"emoji","asset":"🌙"}, 
+  "time": {"type":"emoji","asset":"⏰"}, "day": {"type":"emoji","asset":"📅"}, 
+  "week": {"type":"emoji","asset":"🗓️"}, "later": {"type":"emoji","asset":"⏳"}, 
+  "soon": {"type":"emoji","asset":"⏳"},
+
+  // --- PLACES, THINGS & NAVIGATION ---
+  "water": {"type":"emoji","asset":"💧"}, "food": {"type":"emoji","asset":"🍚"}, 
+  "home": {"type":"emoji","asset":"🏠"}, "house": {"type":"emoji","asset":"🏠"}, 
+  "school": {"type":"emoji","asset":"🏫"}, "bathroom": {"type":"emoji","asset":"🚻"}, 
+  "name": {"type":"emoji","asset":"🪪"}, "phone": {"type":"emoji","asset":"📱"}, 
+  "money": {"type":"emoji","asset":"💰"}, "car": {"type":"emoji","asset":"🚗"}, 
+  "bus": {"type":"emoji","asset":"🚌"}, "train": {"type":"emoji","asset":"🚆"}, 
+  "location": {"type":"emoji","asset":"📍"}, "nearest": {"type":"emoji","asset":"📍"}, 
+  "here": {"type":"emoji","asset":"📍"}, "there": {"type":"emoji","asset":"👉"}, 
+  "street": {"type":"emoji","asset":"🛣️"}, "shop": {"type":"emoji","asset":"🏬"}, 
+  "pharmacy": {"type":"emoji","asset":"💊"}, "station": {"type":"emoji", "asset": "🚉"},
+  "road": {"type":"emoji", "asset": "🛣️"}, "hotel": {"type":"emoji", "asset": "🏨"},
+  "market": {"type":"emoji", "asset": "🛒"}, "entrance": {"type":"emoji", "asset": "🚪"},
+  "exit": {"type":"emoji", "asset": "🚪"}, "left": {"type":"emoji", "asset": "⬅️"},
+  "straight": {"type":"emoji", "asset": "⬆️"}, "near": {"type":"emoji", "asset": "📍"},
+  "far": {"type":"emoji", "asset": "🗺️"},
+
+  // --- MODIFIERS & MISC ---
+  "can": {"type":"emoji","asset":"💪"}, "cannot": {"type":"emoji","asset":"🚫"}, 
+  "cant": {"type":"emoji","asset":"🚫"}, "must": {"type":"emoji","asset":"❗"}, 
+  "more": {"type":"emoji","asset":"➕"}, "less": {"type":"emoji","asset":"➖"}, 
+  "all": {"type":"emoji","asset":"💯"}, "some": {"type":"emoji","asset":"🤏"}, 
+  "big": {"type":"emoji","asset":"📏"}, "small": {"type":"emoji","asset":"🤏"}, 
+  "new": {"type":"emoji","asset":"✨"}, "old": {"type":"emoji","asset":"👴"}, 
+  "fast": {"type":"emoji","asset":"⚡"}, "slow": {"type":"emoji","asset":"🐢"}, 
+  "easy": {"type":"emoji","asset":"😌"}, "hard": {"type":"emoji","asset":"😖"}, 
+  "right": {"type":"emoji","asset":"➡️"}, "wrong": {"type":"emoji","asset":"❌"},
+  "charge": {"type":"emoji", "asset": "🔋"}, "ticket": {"type":"emoji", "asset": "🎟️"},
+  "problem": {"type":"emoji", "asset": "⚠️"}, "quiet": {"type":"emoji", "asset": "🤫"},
+  "repeat": {"type":"emoji", "asset": "🔁"}
+};
